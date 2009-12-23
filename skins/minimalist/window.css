@@ -1,0 +1,49 @@
+div.mce_editorwindow
+{ 
+  display:block;
+  position:absolute;
+  /*
+  width:400px;
+  height:300px;
+     */
+  /*begin init defaults (before pos is called)*/
+  top:0px;
+  left:0px;
+  width:auto;
+  height:auto;
+  /*end init defaults*/
+
+  background-color:#EDEDED;
+  border:1px solid #555555;
+  padding:0.5em 1em 0.5em 0.5em;
+
+ }
+/*
+a.mce_editorwindow_closebtn
+{ 
+  float:right;
+  border:1px solid red;
+  background-color:#FFC0C0;
+  color:red;
+  padding:2px;
+  margin-left:10px;
+ }
+*/
+a.mce_editorwindow_closebtn
+{ 
+  float:right;
+  /*border:1px solid red;
+  background-color:#FFC0C0;
+  color:red;
+  padding:2px;
+  */
+  background-image:url(cornerx.png);
+  margin-left:10px;
+  width:16px;
+  height:16px;
+  color:transparent;
+ }
+a.mce_editorwindow_closebtn:hover
+{ 
+  background-image:url(cornerx_red.png);
+}
