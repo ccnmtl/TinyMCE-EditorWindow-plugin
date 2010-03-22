@@ -169,7 +169,7 @@
 				for (i=2; i<ne.length; i++)
 					t._addAll(te, ne[i]);
 			}
-		},
+		}
 	});
 
 	// Register plugin
