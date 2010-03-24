@@ -42,6 +42,9 @@ a.mce_editorwindow_closebtn
   width:16px;
   height:16px;
   color:transparent;
+  /*for IE 6-8 not supporting transparent text:*/
+    overflow:hidden;
+    line-height:48px;
  }
 a.mce_editorwindow_closebtn:hover
 { 
