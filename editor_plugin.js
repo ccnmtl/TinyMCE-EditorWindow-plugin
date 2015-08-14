@@ -27,69 +27,69 @@
             ed.onKeyDown.add(function(ed,evt){self._closeOnEscape(evt);});
 
             ed.addCursorWindow = function(obj) {
-            if (obj && typeof obj.test == 'function') {
-                if (typeof obj.content == 'function') {
-                self._listeners.push(obj);
+                if (obj && typeof obj.test == 'function') {
+                    if (typeof obj.content == 'function') {
+                        self._listeners.push(obj);
+                    }
                 }
-            }
-            else throw 'addCursorWindow object must have a .test function!';
+                else throw 'addCursorWindow object must have a .test function!';
             };
         },
-            _closeOnEscape: function(evt) {
+        _closeOnEscape: function(evt) {
             //ESCAPE KEY
             if (evt.keyCode==27 && this.opened) {
-            this._closeWindow();
-            Event.cancel(evt);
+                this._closeWindow();
+                Event.cancel(evt);
             }
         },
-            _listeners: [
+        _listeners: [
             {
-            name:'link',
-            test:function(current_elt) {//A tag and not anchor
-                var par = DOM.getParent(current_elt, 'A');
-                if (par && !par.name) return par;
-            },
-            content:function(a_tag) {
-                return DOM.create('a',{href:a_tag.href,
-                           target:'_blank'
-                          },'open link');
-            }
+                name:'link',
+                test:function(current_elt) {//A tag and not anchor
+                    var par = DOM.getParent(current_elt, 'A');
+                    if (par && !par.name) return par;
+                },
+                content:function(a_tag) {
+                    return DOM.create('a',{href:a_tag.href,
+                                           target:'_blank'
+                                          },'open link');
+                }
             }
         ],
-            _nodeChanged: function(ed, cm/*control manager*/, current_elt, collapsed, opt) {
+        _nodeChanged: function(ed, cm/*control manager*/, current_elt, collapsed, opt) {
             var self = this;
 
             var i = self._listeners.length;//last wins
             while (--i >=0) {
-            var par = self._listeners[i].test(current_elt);
-            if (par) {
-                if (this.opened) {
-                if (par == this.tag_for_window) {
-                    this._positionWindow(ed,current_elt, par);
-                } else {
-                    ///superceded by another listeners
-                    ///TODO: maybe we should do this based on
-                    ///closeness to child, but then we assume
-                    ///they're both parents
-                    ///- also impedes real supercession (e.g. A.cls beats link)
-                    this._closeWindow();
+                var par = self._listeners[i].test(current_elt);
+                if (par) {
+                    if (this.opened) {
+                        if (par == this.tag_for_window) {
+                            this._positionWindow(ed,current_elt, par);
+                        } else {
+                            ///superceded by another listeners
+                            ///TODO: maybe we should do this based on
+                            ///closeness to child, but then we assume
+                            ///they're both parents
+                            ///- also impedes real supercession (e.g. A.cls beats link)
+                            this._closeWindow();
+                        }
+                    }
+                    //retest this.opened in case it was just closed above
+                    if (!this.opened && par != this.tag_for_window) {
+                        this.opened = self._listeners[i];
+                        this.tag_for_window = par;
+                        this._openWindow(ed,current_elt, par);
+                    }
+                    break;
                 }
-                }
-                //retest this.opened in case it was just closed above
-                if (!this.opened && par != this.tag_for_window) {
-                this.opened = self._listeners[i];
-                this.tag_for_window = par;
-                this._openWindow(ed,current_elt, par);
-                }
-                break;
-            }
             }
             if (i < 0) { //no results
-            this._closeWindow();
-            this.tag_for_window = false;
+                this._closeWindow();
+                this.tag_for_window = false;
             }
         },
-            getAbsoluteCursorPos: function(ed,current_elt,/*optional*/parent) {
+        getAbsoluteCursorPos: function(ed,current_elt,/*optional*/parent) {
             //parent determines the x-pos, which can stabilize positioning
             var pos = {container:ed.getContentAreaContainer()};
             var p1 = DOM.getPos(current_elt);
@@ -101,53 +101,53 @@
             pos.y = p1.y+cp.y;
             return pos;
         },
-                _positionWindow: function(ed,current_elt,par) {
+        _positionWindow: function(ed,current_elt,par) {
             var pos = this.getAbsoluteCursorPos(ed,current_elt,par);
             var rect = DOM.getRect(this.win);
             var viewport = DOM.getViewPort(window);
 
             DOM.setStyles(this.win,{
-            top:(pos.y +20) +'px',
-            left:Math.min(pos.x +10, Math.max(0,viewport.w-rect.w-20)) +'px'
+                top:(pos.y +20) +'px',
+                left:Math.min(pos.x +10, Math.max(0,viewport.w-rect.w-20)) +'px'
             });
         },
-            _newWindow:function(id) {
+        _newWindow:function(id) {
             var win = DOM.create('div',{
-            'class':'mce_editorwindow',
-            'id':id
+                'class':'mce_editorwindow',
+                'id':id
             });
-                this._addAll(
-                    win,
+            this._addAll(
+                win,
+                [
+                    'div',
+                    {
+                        id: id + '_top'
+                    },
+                    [
+                        'a',
+                        {
+                            id: id + '_close',
+                            'class': 'mce_editorwindow_closebtn',
+                            tabindex : '-1',
+                            href: 'javascript:;',
+                            onmousedown: 'return false;'
+                        },
+                        'x'
+                    ],
                     [
                         'div',
                         {
-                            id: id + '_top'
-                        },
-                        [
-                            'a',
-                            {
-                                id: id + '_close',
-                                'class': 'mce_editorwindow_closebtn',
-                                tabindex : '-1',
-                                href: 'javascript:;',
-                                onmousedown: 'return false;'
-                            },
-                            'x'
-                        ],
-                        [
-                            'div',
-                            {
-                                id: id + '_content'
-                            }
-                        ]
+                            id: id + '_content'
+                        }
                     ]
-                );
+                ]
+            );
             //a little much?  but that's where the key events are :-(
             //any changes should also update removal in _closeWindow
             Event.add(window,'keydown',this._closeOnEscape,this);
             return win;
         },
-            _openWindow: function(ed,current_elt,par) {
+        _openWindow: function(ed,current_elt,par) {
             var self = this;
             ///TODO: we could wait here, and wrap this in a setTimeout
             /// make sure that someone 'settled' onto the element, but
@@ -164,22 +164,22 @@
             this._positionWindow(ed,current_elt,par);
 
             Event.add(id+'_close', 'mousedown', function(evt){
-            self._closeWindow(ed,current_elt);
+                self._closeWindow(ed,current_elt);
             });
         },
-            _closeWindow: function(ed,current_elt) {
+        _closeWindow: function(ed,current_elt) {
             if (this.opened && typeof this.opened.onUnload == 'function') {
-            this.opened.onUnload(this.win);
+                this.opened.onUnload(this.win);
             }
             this.opened = false;
             if (this.win) {
-            Event.remove(window,'keydown',this._closeOnEscape,this);
-            DOM.remove(this.win);
-            delete this.win;
+                Event.remove(window,'keydown',this._closeOnEscape,this);
+                DOM.remove(this.win);
+                delete this.win;
             }
         },
-            ///copied from inlinepopups plugin
-            _addAll : function(te, ne) {
+        ///copied from inlinepopups plugin
+        _addAll : function(te, ne) {
             var i, n, t = this;
 
             if (is(ne, 'string'))
