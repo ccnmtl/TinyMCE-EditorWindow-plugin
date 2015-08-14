@@ -2,7 +2,7 @@
  * $Id
  *
  * @author Schuyler Duveen at Columbia Center for New Media Teaching and Learning
- * @copyright Copyright © 2009, Columbia University 
+ * @copyright Copyright (C) 2009, Columbia University 
  * @license LGPL 2.1 and any later version
  */
 
@@ -33,7 +33,7 @@
 			    }
 			}
 			else throw 'addCursorWindow object must have a .test function!';
-		    }
+		    };
 		},
 	        _closeOnEscape: function(evt) {
 		    //ESCAPE KEY
@@ -116,10 +116,31 @@
 			'class':'mce_editorwindow',
 			'id':id
 		    });
-		    this._addAll(win, ['div',{id:id+'_top'},
-				       ['a', {id:id+'_close','class' : 'mce_editorwindow_closebtn', tabindex : '-1', href : 'javascript:;', onmousedown : 'return false;'},'x'],
-				       ['div',{id:id+'_content'}]
-				      ]
+		        this._addAll(
+                    win,
+                    [
+                        'div',
+                        {
+                            id: id + '_top'
+                        },
+				        [
+                            'a',
+                            {
+                                id: id + '_close',
+                                'class': 'mce_editorwindow_closebtn',
+                                tabindex : '-1',
+                                href: 'javascript:;',
+                                onmousedown: 'return false;'
+                            },
+                            'x'
+                        ],
+				        [
+                            'div',
+                            {
+                                id: id + '_content'
+                            }
+                        ]
+				    ]
 				);
 		    //a little much?  but that's where the key events are :-(
 		    //any changes should also update removal in _closeWindow
