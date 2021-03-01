@@ -28,7 +28,7 @@
             var self = this;
             DOM.loadCSS(url + '/css/editorwindow.css');
             //ed.dom.loadCSS(....)
-            ed.onNodeChange.add(this._nodeChanged,this);
+            ed.onNodeChange.add(this._nodeChanged, this);
             ed.onKeyDown.add(function(ed, evt) {
                 self._closeOnEscape(evt);
             });
@@ -63,7 +63,7 @@
                     return DOM.create('a', {
                         href: a_tag.href,
                         target: '_blank'
-                    },'open link');
+                    }, 'open link');
                 }
             }
         ],
@@ -80,7 +80,7 @@
                 if (parent) {
                     if (this.opened) {
                         if (parent === this.tag_for_window) {
-                            this._positionWindow(ed,currentElt, parent);
+                            this._positionWindow(ed, currentElt, parent);
                         } else {
                             ///superceded by another listeners
                             ///TODO: maybe we should do this based on
@@ -120,7 +120,7 @@
             return pos;
         },
         _positionWindow: function(ed, currentElt, parent) {
-            var pos = this.getAbsoluteCursorPos(ed,currentElt,parent);
+            var pos = this.getAbsoluteCursorPos(ed, currentElt, parent);
             var rect = DOM.getRect(this.win);
             var viewport = DOM.getViewPort(window);
 
@@ -143,12 +143,12 @@
                     'div',
                     {id: id + '_top'},
                     ['a',
-                     {
-                         id: id + '_close',
-                         'class': 'mce_editorwindow_closebtn',
-                         tabindex: '-1',
-                         href: '#'
-                     },
+                        {
+                            id: id + '_close',
+                            'class': 'mce_editorwindow_closebtn',
+                            tabindex: '-1',
+                            href: '#'
+                        },
                      'x'
                     ],
                     ['div', {id: id + '_content'}]
@@ -172,7 +172,7 @@
             //custom content
             DOM.get(id + '_content').appendChild(this.opened.content(parent));
 
-            this._positionWindow(ed,currentElt,parent);
+            this._positionWindow(ed, currentElt, parent);
 
             DomQuery('#' + id + '_close').on('click', function(evt) {
                 evt.preventDefault();
@@ -185,7 +185,7 @@
             }
             this.opened = false;
             if (this.win) {
-                Event.unbind(window,'keydown',this._closeOnEscape,this);
+                Event.unbind(window, 'keydown', this._closeOnEscape, this);
                 DOM.remove(this.win);
                 delete this.win;
             }
